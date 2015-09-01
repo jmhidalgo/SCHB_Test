@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.dao.UserDAO;
+import model.dao.UserDAOFactory;
+import model.vo.User;
+
 /**
  * Servlet implementation class ControllerActions
  */
@@ -43,22 +47,37 @@ public class ControllerActions extends HttpServlet {
 			throws ServletException, IOException {
 		
 		RequestDispatcher dispatcher = null;
-		String param = request.getParameter("action");
+		String action = request.getParameter("action");
 
-		if (param == null)
+		if (action == null){		
 			throw new ServletException("Missing parameter in Controller.");
-		else if (param.equals("doLogin"))
-			dispatcher = getServletContext().getNamedDispatcher("Weather");
-		else
-			throw new ServletException("Improper parameter passed to Controller.");
-
-		/*
-		if (dispatcher != null)
+		} else if (action.equals("doLogin")){
+			
+			String username = request.getParameter("user");
+			String password = request.getParameter("pass");
+			
+			if (checkUserLogin(username, password)){
+				request.setAttribute("user", username);
+				dispatcher = request.getRequestDispatcher("profile.jsp");
+			}
+	
+		} else {
+			throw new ServletException("Improper action parameter passed to Controller.");
+		}
+			
+		if (dispatcher != null){
 			dispatcher.forward(request, response);
-		else
+		} else {
 			throw new ServletException("Controller received a null dispatcher.");
-		*/
+		}
 		
+	}
+	
+	
+	private boolean checkUserLogin(String username, String password){
+		UserDAO userDAO = UserDAOFactory.getUserDAO();
+		User user = userDAO.findUser(username);
+		return user != null && password.equals(user.getPassword());
 	}
 
 }
