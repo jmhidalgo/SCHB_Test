@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>User Profile</title>
-<link rel="stylesheet" href="style/css/style.css">
 </head>
 <body>
-    <%@ include file="userVerification.jsp" %>
-	<h1>USER PROFILE</h1>
-	<p>
-		Wellcome,
-		<%=request.getParameter("user")%></p>
+	<%
+		Boolean isValidLogin = (Boolean) session.getAttribute("isValidLogin");
+		if (isValidLogin == null || !isValidLogin) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+	%>
 </body>
 </html>

@@ -57,6 +57,7 @@ public class ControllerActions extends HttpServlet {
 			String password = request.getParameter("pass");
 			
 			if (checkUserLogin(username, password)){
+				request.getSession().setAttribute("isValidLogin", true);
 				request.setAttribute("user", username);
 				dispatcher = request.getRequestDispatcher("profile.jsp");
 			}
