@@ -21,16 +21,12 @@ public class UserDAO {
 		User user = null;
 		ResultSet result = null;
 		try {
+			
 			PreparedStatement st = connection.prepareStatement(
-					"SELECT CODE, NAME, SURNAME, USERNAME, PASSWORD FROM USERS WHERE USERNAME = '" + username + "'");
+					"SELECT CODE, NAME, SURNAME, USERNAME, PASSWORD FROM USERS WHERE USERNAME = '" + username + "';");
 			result = st.executeQuery();
 
 			if (result.next()) {
-
-				/*
-				 * this.code = code; this.name = name; this.surname = surname;
-				 * this.username = username; this.roles = roles;
-				 */
 
 				Integer code = result.getInt("code");
 				String name = result.getString("name");
@@ -42,10 +38,10 @@ public class UserDAO {
 			}
 
 		} catch (SQLException ex) {
-			System.err.println(ex.getMessage());
+			ex.printStackTrace();
 		}
 
-		return null;
+		return user;
 	}
 
 }
